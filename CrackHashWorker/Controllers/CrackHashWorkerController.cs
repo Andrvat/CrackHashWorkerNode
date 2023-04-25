@@ -49,13 +49,15 @@ public class CrackHashWorkerController
 
     private async Task SendResponseToManager(CrackHashManagerRequestDto workerTaskInfo, List<string> words)
     {
-        Console.WriteLine($"Send data to RabbitMq: {_bus.Address}");
-        await _bus.Publish<ITaskFinished>(new CrackHashWorkerResponseDto
+        var crackHashWorkerResponseDto = new CrackHashWorkerResponseDto
         {
             RequestId = workerTaskInfo.RequestId,
             PartNumber = workerTaskInfo.PartNumber,
             Words = words.ToArray()
-        });
+        };
+        
+        Console.WriteLine($"Send data to RabbitMQ: {_bus.Address}. Data: {crackHashWorkerResponseDto}");
+        await _bus.Publish<ITaskFinished>(crackHashWorkerResponseDto);
         
         var managerRequestPath = "/internal/api/manager/hash/crack/request";
         Console.WriteLine($"Send request to manager by path: {managerRequestPath}");
