@@ -34,7 +34,7 @@ public class CrackHashWorkerController : ControllerBase
     {
         Console.WriteLine($"Handle request to run crack hash task by path: {Request.Path}");
         
-        var workerTaskInfo = await _messageService.AwaitMessage();
+        var workerTaskInfo = _messageService.GetMessage();
         Console.WriteLine($"Data from RabbitMq: {workerTaskInfo}");
         
         var words = await _crackHashWorker.Run(workerTaskInfo);

@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<CrackHashWorker>();
-builder.Services.AddScoped<WorkerTaskSentConsumer>();
+builder.Services.AddSingleton<WorkerTaskSentConsumer>();
 builder.Services.AddSingleton<MessageService<CrackHashManagerRequestDto>>();
 
 builder.Services.AddMassTransit(x => { 

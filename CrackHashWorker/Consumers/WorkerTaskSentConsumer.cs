@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Concurrent;
+using System.Xml.Serialization;
 using DataContracts;
 using DataContracts.Dto;
 using DataContracts.MassTransit;
@@ -19,8 +20,8 @@ public class WorkerTaskSentConsumer : IConsumer<ISendWorkerTask>
     {
         var message = context.Message;
         var managerRequest = MapperConfig.GetAutomapperInstance().Map<CrackHashManagerRequestDto>(message);
-        Console.WriteLine($"\nDEBUG WORKER CONSUME\n {managerRequest}");
-        _messageService.NextMessage(managerRequest);
+        Console.WriteLine($"\nCONSUMER Consume\n {managerRequest}");
+        _messageService.AddMessage(managerRequest);
         return Task.CompletedTask;
     }
 }
