@@ -1,12 +1,11 @@
 ﻿using DataContracts.Dto;
 using DataContracts.MassTransit;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
 using Worker.Logic;
 
 namespace Worker.Controllers;
 
-public class CrackHashWorkerController : ControllerBase
+public class CrackHashWorkerController
 {
     private CrackHashWorker _crackHashWorker;
     private MessageService<CrackHashManagerRequestDto> _messageService;
@@ -29,11 +28,8 @@ public class CrackHashWorkerController : ControllerBase
         _httpClient.BaseAddress = new Uri("http://manager:5180/");
     }
 
-    [HttpPost("/internal/api/worker/hash/crack/task")]
     public async void RunCrackHashTask()
     {
-        Console.WriteLine($"Handle request to run crack hash task by path: {Request.Path}");
-        
         var workerTaskInfo = _messageService.GetMessage();
         Console.WriteLine($"Data from RabbitMq: {workerTaskInfo}");
         

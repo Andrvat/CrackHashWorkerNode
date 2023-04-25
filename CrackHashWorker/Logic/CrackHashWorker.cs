@@ -26,6 +26,8 @@ public class CrackHashWorker
             
             var enumerator = MoveForwardBy(variations.GetEnumerator(), lowBorder);
             
+            Console.WriteLine($"HARD WORKING ({workerTaskInfo.RequestId}): I will hard work with {highBorder - lowBorder} tasks... ^-^");
+            
             for (var currentIndex = lowBorder; currentIndex < highBorder; currentIndex++)
             {
                 enumerator.MoveNext();
