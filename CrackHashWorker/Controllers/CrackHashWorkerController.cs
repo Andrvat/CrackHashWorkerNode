@@ -25,7 +25,10 @@ public class CrackHashWorkerController
         var httpClientHandler = new HttpClientHandler();
         httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
         _httpClient = new HttpClient(httpClientHandler);
-        _httpClient.BaseAddress = new Uri("http://manager:5180/");
+        var managerUri =
+            $"http://{Environment.GetEnvironmentVariable("MANAGER_HOSTNAME")!}:{int.Parse(Environment.GetEnvironmentVariable("MANAGER_PORT")!)}/";
+        Console.WriteLine($"Manage Uri: {managerUri}");
+        _httpClient.BaseAddress = new Uri(managerUri);
     }
 
     public async void RunCrackHashTask()

@@ -16,10 +16,10 @@ builder.Services.AddSingleton<MessageService<CrackHashManagerRequestDto>>();
 builder.Services.AddMassTransit(x => { 
     x.UsingRabbitMq((busRegistrationContext, busFactoryConfigurator) =>
     {
-        busFactoryConfigurator.Host(new Uri("rabbitmq://rabbitmq:5672/"), h =>
+        busFactoryConfigurator.Host(new Uri(Environment.GetEnvironmentVariable("RABBITMQ_3_URI")!), h =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            h.Username(Environment.GetEnvironmentVariable("RABBITMQ_3_LOGIN")!);
+            h.Password(Environment.GetEnvironmentVariable("RABBITMQ_3_PASSWORD")!);
         });
         
         busFactoryConfigurator.ReceiveEndpoint("worker-task-sent", e =>

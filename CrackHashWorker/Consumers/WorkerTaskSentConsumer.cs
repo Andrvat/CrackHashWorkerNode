@@ -23,7 +23,6 @@ public class WorkerTaskSentConsumer : IConsumer<ISendWorkerTask>
     {
         var message = context.Message;
         var managerRequest = MapperConfig.GetAutomapperInstance().Map<CrackHashManagerRequestDto>(message);
-        Console.WriteLine($"\nCONSUMER Consume\n {managerRequest}");
         _messageService.AddMessage(managerRequest);
         
         _crackHashWorkerController.RunCrackHashTask();
