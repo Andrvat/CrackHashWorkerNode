@@ -9,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<CrackHashWorker>();
-builder.Services.AddSingleton<WorkerTaskSentConsumer>();
-builder.Services.AddSingleton<CrackHashWorkerController>();
+builder.Services.AddScoped<WorkerTaskSentConsumer>();
+builder.Services.AddScoped<CrackHashWorkerController>();
 builder.Services.AddSingleton<MessageService<CrackHashManagerRequestDto>>();
 
 builder.Services.AddMassTransit(x => { 
@@ -20,12 +20,24 @@ builder.Services.AddMassTransit(x => {
         {
             h.Username(Environment.GetEnvironmentVariable("RABBITMQ_3_LOGIN")!);
             h.Password(Environment.GetEnvironmentVariable("RABBITMQ_3_PASSWORD")!);
+            h.Heartbeat(TimeSpan.Zero);
         });
         
+        // busFactoryConfigurator.Publish<ITaskFinished>(x => { x.ExchangeType = "direct";});
+
         busFactoryConfigurator.ReceiveEndpoint("worker-task-sent", e =>
         {
+            // e.Bind("worker-task-sent-exchange", x =>
+            // {
+            //     x.Durable = true;
+            //     x.AutoDelete = false;
+            //     x.ExchangeType = "direct";
+            // });
+            // e.Bind<ISendWorkerTask>();
             e.Consumer<WorkerTaskSentConsumer>(busRegistrationContext);
-            e.PurgeOnStartup = true;
+            e.PurgeOnStartup = false;
+            e.Durable = true;
+            e.AutoDelete = false;
         });
     });
 });
