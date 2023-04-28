@@ -61,9 +61,5 @@ public class CrackHashWorkerController
         
         Console.WriteLine($"Send data to RabbitMQ: {_bus.Address}. Data: {crackHashWorkerResponseDto}");
         await _bus.Publish<ITaskFinished>(crackHashWorkerResponseDto);
-        
-        var managerRequestPath = "/internal/api/manager/hash/crack/request";
-        Console.WriteLine($"Send request to manager by path: {managerRequestPath}");
-        await _httpClient.PatchAsync(managerRequestPath, null);
     }
 }
